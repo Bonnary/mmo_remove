@@ -1,0 +1,25 @@
+[project]
+name = "mmo-remove"
+version = "0.1.0"
+description = "PySide6 Video Editor - Remove music, overlay, transform, batch export"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "PySide6>=6.6",
+    "demucs>=4.0",
+    "lameenc>=1.7",
+    "torch>=2.0",
+    "torchaudio>=2.0",
+]
+
+[tool.uv]
+torch-backend = "cu124"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu124" }
+torchaudio = { index = "pytorch-cu124" }
+
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true

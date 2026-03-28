@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>centralWidget</class>
+    <widget class="QWidget" name="centralWidget">
+        <layout class="QHBoxLayout" name="mainLayout">
+            <item>
+                <layout class="QVBoxLayout" name="leftPanel">
+                    <item>
+                        <widget class="QLabel" name="lblVideos">
+                            <property name="text">
+                                <string>Videos</string>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <bold>true</bold>
+                                    <pointsize>11</pointsize>
+                                </font>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QListWidget" name="listVideos"/>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" name="videoButtonsLayout">
+                            <item>
+                                <widget class="QPushButton" name="btnAddVideos">
+                                    <property name="text">
+                                        <string>Add Videos</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QPushButton" name="btnRemoveVideo">
+                                    <property name="text">
+                                        <string>Remove</string>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <widget class="QGroupBox" name="groupSettings">
+                            <property name="title">
+                                <string>Edit Settings</string>
+                            </property>
+                            <layout class="QFormLayout" name="settingsLayout">
+                                <item row="0" column="0" colspan="2">
+                                    <widget class="QCheckBox" name="chkRemoveMusic">
+                                        <property name="text">
+                                            <string>Remove Music (keep voice only)</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="1" column="0">
+                                    <widget class="QLabel">
+                                        <property name="text">
+                                            <string>Rotation:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="1" column="1">
+                                    <widget class="QComboBox" name="comboRotation">
+                                        <item>
+                                            <property name="text">
+                                                <string>0°</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>90°</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>180°</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>270°</string>
+                                            </property>
+                                        </item>
+                                    </widget>
+                                </item>
+                                <item row="2" column="0">
+                                    <widget class="QLabel">
+                                        <property name="text">
+                                            <string>Aspect Ratio:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="2" column="1">
+                                    <widget class="QComboBox" name="comboAspect">
+                                        <item>
+                                            <property name="text">
+                                                <string>Original</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>16:9</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>9:16</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>4:3</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>1:1</string>
+                                            </property>
+                                        </item>
+                                    </widget>
+                                </item>
+                                <item row="3" column="0" colspan="2">
+                                    <widget class="QCheckBox" name="chkFlipH">
+                                        <property name="text">
+                                            <string>Flip Horizontal</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="4" column="0" colspan="2">
+                                    <widget class="QCheckBox" name="chkFlipV">
+                                        <property name="text">
+                                            <string>Flip Vertical</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="5" column="0">
+                                    <widget class="QLabel">
+                                        <property name="text">
+                                            <string>Speed:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="5" column="1">
+                                    <layout class="QHBoxLayout">
+                                        <item>
+                                            <widget class="QSlider" name="sliderSpeed">
+                                                <property name="orientation">
+                                                    <enum>Qt::Horizontal</enum>
+                                                </property>
+                                                <property name="minimum">
+                                                    <number>25</number>
+                                                </property>
+                                                <property name="maximum">
+                                                    <number>400</number>
+                                                </property>
+                                                <property name="value">
+                                                    <number>100</number>
+                                                </property>
+                                                <property name="tickInterval">
+                                                    <number>25</number>
+                                                </property>
+                                                <property name="tickPosition">
+                                                    <enum>QSlider::TicksBelow</enum>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLabel" name="lblSpeedValue">
+                                                <property name="text">
+                                                    <string>1.00x</string>
+                                                </property>
+                                                <property name="minimumSize">
+                                                    <size>
+                                                        <width>45</width>
+                                                        <height>0</height>
+                                                    </size>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </item>
+                                <item row="6" column="0">
+                                    <widget class="QLabel">
+                                        <property name="text">
+                                            <string>Trim Start:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="6" column="1">
+                                    <widget class="QDoubleSpinBox" name="spinTrimStart">
+                                        <property name="minimum">
+                                            <double>0.0</double>
+                                        </property>
+                                        <property name="maximum">
+                                            <double>99999.0</double>
+                                        </property>
+                                        <property name="decimals">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="suffix">
+                                            <string> s</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="7" column="0">
+                                    <widget class="QLabel">
+                                        <property name="text">
+                                            <string>Trim End:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="7" column="1">
+                                    <widget class="QDoubleSpinBox" name="spinTrimEnd">
+                                        <property name="minimum">
+                                            <double>0.0</double>
+                                        </property>
+                                        <property name="maximum">
+                                            <double>99999.0</double>
+                                        </property>
+                                        <property name="decimals">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="suffix">
+                                            <string> s</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="8" column="0" colspan="2">
+                                    <widget class="QPushButton" name="btnAddOverlay">
+                                        <property name="text">
+                                            <string>Add Image Overlay...</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="9" column="0" colspan="2">
+                                    <widget class="QPushButton" name="btnRemoveOverlay">
+                                        <property name="text">
+                                            <string>Remove Overlay</string>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btnExport">
+                            <property name="text">
+                                <string>Export All</string>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <bold>true</bold>
+                                </font>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>36</height>
+                                </size>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QProgressBar" name="progressBar">
+                            <property name="value">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QLabel" name="lblExportStatus">
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item>
+                <layout class="QVBoxLayout" name="rightPanel">
+                    <item>
+                        <widget class="QGraphicsView" name="graphicsView">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>1</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="horizontalScrollBarPolicy">
+                                <enum>Qt::ScrollBarAlwaysOff</enum>
+                            </property>
+                            <property name="verticalScrollBarPolicy">
+                                <enum>Qt::ScrollBarAlwaysOff</enum>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" name="playbackLayout">
+                            <item>
+                                <widget class="QPushButton" name="btnPlayPause">
+                                    <property name="text">
+                                        <string>Play</string>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>60</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QSlider" name="sliderSeek">
+                                    <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QLabel" name="lblTime">
+                                    <property name="text">
+                                        <string>00:00</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QLabel">
+                                    <property name="text">
+                                        <string>/</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QLabel" name="lblDuration">
+                                    <property name="text">
+                                        <string>00:00</string>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <widget class="QLabel" name="lblStatus">
+                            <property name="text">
+                                <string>Add videos to get started</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+        </layout>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>
