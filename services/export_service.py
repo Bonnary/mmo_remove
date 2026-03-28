@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import shutil
 import threading
 import traceback
 from pathlib import Path
@@ -38,6 +39,7 @@ class ExportWorker(QThread):
         self._demucs = demucs_service
 
     def run(self) -> None:
+        demucs_output_dir = self.video.path.parent / ".demucs_output"
         try:
             self.video.status = "processing"
             audio_path: Path | None = None
@@ -102,6 +104,9 @@ class ExportWorker(QThread):
             self.video.status = "error"
             self.video.error_msg = str(e)
             self.error.emit(str(e))
+        finally:
+            if demucs_output_dir.exists():
+                shutil.rmtree(demucs_output_dir, ignore_errors=True)
 
 
 class ExportService:
