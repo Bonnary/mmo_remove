@@ -1,9 +1,18 @@
 import logging
 import sys
+from pathlib import Path
 
 from app import VideoEditorApp
 
-logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+_log_file = Path(__file__).parent / "app.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(_log_file, encoding="utf-8"),
+    ],
+)
 
 
 def main():

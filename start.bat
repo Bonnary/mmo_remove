@@ -61,3 +61,6 @@ call "%~dp0\.venv\Scripts\activate"
 
 echo Starting application...
 python "%~dp0\main.py"
+echo.
+echo App exited with code %errorlevel%. See app.log for details.
+pause
