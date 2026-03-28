@@ -5,7 +5,7 @@ import shutil
 import traceback
 from pathlib import Path
 
-from PySide6.QtCore import QThread, Signal
+from PySide6.QtCore import QObject, QThread, Signal
 
 from models.edit_settings import EditSettings
 from models.video_item import VideoItem
@@ -88,13 +88,14 @@ class ExportWorker(QThread):
                 shutil.rmtree(demucs_output_dir, ignore_errors=True)
 
 
-class ExportService:
+class ExportService(QObject):
     def __init__(
         self,
         ffmpeg_service: FFmpegService,
         demucs_service: DemucsService,
         signals: AppSignals,
     ) -> None:
+        super().__init__()
         self._ffmpeg = ffmpeg_service
         self._demucs = demucs_service
         self._signals = signals
@@ -128,6 +129,7 @@ class ExportService:
                 self._worker.status_update.disconnect(self._signals.status_message)
             except RuntimeError:
                 pass
+            self._worker.wait()  # ensure the OS thread has exited before GC
             self._worker = None
 
         if self._current_index >= len(self._videos):

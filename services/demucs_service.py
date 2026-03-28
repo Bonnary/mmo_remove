@@ -10,11 +10,36 @@ log = logging.getLogger(__name__)
 
 CHUNK_SECONDS = 300  # 5 minutes per chunk
 _CFLAGS = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+_MIN_CHUNK_SECONDS = 10  # demucs pad1d fails on very short audio
 
 
 class DemucsService:
+    def _pad_if_short(self, chunk: Path) -> Path:
+        """Return a silence-padded copy if chunk is shorter than _MIN_CHUNK_SECONDS.
+
+        Demucs' pad1d asserts on very short audio (e.g. the last chunk of a long
+        file). Padding to a minimum duration prevents the AssertionError.
+        """
+        padded = chunk.with_stem(chunk.stem + "_padded")
+        r = subprocess.run(
+            ["ffmpeg", "-y", "-i", str(chunk),
+             "-af", f"apad=whole_dur={_MIN_CHUNK_SECONDS}",
+             str(padded)],
+            capture_output=True, text=True, encoding="utf-8",
+            creationflags=_CFLAGS,
+        )
+        if r.returncode != 0:
+            log.warning("apad failed for %s, using original: %s", chunk.name, r.stderr[-200:])
+            return chunk
+        return padded
+
     def _run_chunk(self, chunk: Path, output_dir: Path) -> None:
-        """Run demucs on one audio chunk, CUDA first then CPU fallback."""
+        """Run demucs on one audio chunk, CUDA first then CPU fallback.
+
+        If a padded copy was used, the output directory is renamed back to the
+        original chunk stem so extract_vocals can find it.
+        """
+        input_path = self._pad_if_short(chunk)
         last_err = ""
         for device in ["cuda", "cpu"]:
             cmd = [
@@ -23,7 +48,7 @@ class DemucsService:
                 "--mp3",
                 "-d", device,
                 "-o", str(output_dir),
-                str(chunk),
+                str(input_path),
             ]
             log.info("demucs chunk=%s device=%s", chunk.name, device)
             r = subprocess.run(
@@ -32,9 +57,19 @@ class DemucsService:
             )
             if r.returncode == 0:
                 log.info("demucs chunk=%s done on %s", chunk.name, device)
+                # If we used a padded file, rename the output dir to the original stem
+                if input_path != chunk:
+                    for model_dir in output_dir.iterdir():
+                        if not model_dir.is_dir():
+                            continue
+                        padded_out = model_dir / input_path.stem
+                        original_out = model_dir / chunk.stem
+                        if padded_out.exists() and not original_out.exists():
+                            padded_out.rename(original_out)
                 return
             last_err = r.stderr
             log.warning("demucs chunk=%s device=%s failed: %s", chunk.name, device, last_err[-400:])
+
         raise RuntimeError(f"demucs failed for {chunk.name}: {last_err}")
 
     def extract_vocals(
