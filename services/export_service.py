@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import shutil
-import threading
 import traceback
 from pathlib import Path
 
@@ -47,30 +46,10 @@ class ExportWorker(QThread):
 
             # ── Phase 1: Demucs (0 → 45%) ─────────────────────────────
             if has_demucs:
-                self.status_update.emit("Extracting audio…")
+                self.status_update.emit("Removing music…")
                 self.progress.emit(0.02)
-
-                # Heartbeat animates the bar while demucs blocks
-                _pct = [0.0]
-                _done = threading.Event()
-
-                def _heartbeat() -> None:
-                    while not _done.wait(0.4):
-                        _pct[0] = min(_pct[0] + 0.012, 0.88)
-                        self.progress.emit(_pct[0] * 0.45)
-                        self.status_update.emit(
-                            f"Removing music… {int(_pct[0] * 100)}%"
-                        )
-
-                hb = threading.Thread(target=_heartbeat, daemon=True)
-                hb.start()
-                try:
-                    audio_path = self._demucs.extract_vocals(self.video.path)
-                    self.video.vocals_path = audio_path
-                finally:
-                    _done.set()
-                    hb.join()
-
+                audio_path = self._demucs.extract_vocals(self.video.path)
+                self.video.vocals_path = audio_path
                 self.progress.emit(0.45)
                 self.status_update.emit("Music removed — encoding…")
 

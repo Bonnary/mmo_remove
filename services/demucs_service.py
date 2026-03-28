@@ -4,32 +4,12 @@ import logging
 import subprocess
 import sys
 import tempfile
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 log = logging.getLogger(__name__)
 
 CHUNK_SECONDS = 300  # 5 minutes per chunk
 _CFLAGS = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
-
-
-def _max_parallel() -> int:
-    """Return how many concurrent demucs processes fit in available VRAM.
-
-    Each process needs ~2 GB (1 GB model + ~1 GB processing buffers).
-    Falls back to 1 if CUDA is unavailable or torch is not importable.
-    """
-    try:
-        import torch
-        if not torch.cuda.is_available():
-            return 1
-        free_bytes, _ = torch.cuda.mem_get_info()
-        free_gb = free_bytes / (1024 ** 3)
-        workers = max(1, int(free_gb // 2))
-        log.info("VRAM free=%.1f GB → max_parallel=%d", free_gb, workers)
-        return workers
-    except Exception:
-        return 1
 
 
 class DemucsService:
@@ -92,14 +72,11 @@ class DemucsService:
             chunks = sorted(chunks_dir.glob("chunk_*.wav"))
             if not chunks:
                 raise RuntimeError("No audio chunks were created")
-            max_parallel = _max_parallel()
-            log.info("Processing %d chunk(s), max %d parallel", len(chunks), max_parallel)
+            log.info("Processing %d chunk(s) sequentially", len(chunks))
 
-            # ── Step 3: process all chunks in parallel ─────────────────────
-            with ThreadPoolExecutor(max_workers=max_parallel) as pool:
-                futures = {pool.submit(self._run_chunk, c, output_dir): c for c in chunks}
-                for fut in as_completed(futures):
-                    fut.result()  # re-raises on any chunk failure
+            # ── Step 3: process chunks one at a time ───────────────────────
+            for chunk in chunks:
+                self._run_chunk(chunk, output_dir)
 
         finally:
             tmp_audio.unlink(missing_ok=True)
