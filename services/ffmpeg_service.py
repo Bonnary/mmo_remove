@@ -58,7 +58,7 @@ class FFmpegService:
             str(path),
         ]
         r = subprocess.run(
-            cmd, capture_output=True, text=True,
+            cmd, capture_output=True, text=True, encoding="utf-8",
             creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
         )
         if r.returncode != 0:
@@ -241,6 +241,7 @@ class FFmpegService:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
+            encoding="utf-8",
             creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
         )
 
